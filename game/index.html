@@ -49,64 +49,57 @@
 <body>
     <div class="container">
         <h1>Opening Swick Game</h1>
-        <p>Please wait while we redirect you to the game...</p>
+        <p id="status">Please wait while we redirect you to the game...</p>
         <div class="loading"></div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Extract the game name from the URL path (format: /game/swing_hanger)
-            const path = window.location.pathname;
-            const gamePath = path.split('/game/')[1] || '';
-            
-            // Remove any trailing slashes or .html
-            let gameName = gamePath.replace(/\/$/, '').replace('.html', '');
-            
-            // If no game name found, redirect to main page
-            if (!gameName) {
-                window.location.href = "https://swick24.github.io";
-                return;
-            }
-            
-            // Try to open the app with deep link
-            openApp(gameName);
-        });
+        // Get the full path and extract game name
+        const path = window.location.pathname;
+        const gameName = extractGameName(path);
         
-        function openApp(gameName) {
-            // App package name and Play Store URL
+        if (!gameName) {
+            document.getElementById('status').textContent = 'No game specified. Redirecting to main page...';
+            setTimeout(() => {
+                window.location.href = 'https://swick24.github.io';
+            }, 2000);
+        } else {
+            redirectToApp(gameName);
+        }
+
+        function extractGameName(path) {
+            // Handle both /game/gamename and /gamename formats
+            const parts = path.split('/').filter(part => part && part !== 'game' && part !== 'index.html');
+            return parts.length > 0 ? parts[0].replace('.html', '') : null;
+        }
+
+        function redirectToApp(gameName) {
             const packageName = 'com.main.swick';
-            const playStoreUrl = 'https://play.google.com/store/apps/details?id=' + packageName;
+            const playStoreUrl = `https://play.google.com/store/apps/details?id=${packageName}`;
             
-            // Create both intent and https deep links
-            const intentDeepLink = `intent://swick24.github.io/game/${gameName}#Intent;scheme=https;package=${packageName};end`;
-            const httpsDeepLink = `https://swick24.github.io/game/${gameName}`;
+            // Try intent URI first (works best on Android)
+            const intentUri = `intent://swick24.github.io/game/${gameName}#Intent;scheme=https;package=${packageName};end`;
             
-            // First try with intent URI (works better on Android)
-            window.location.href = intentDeepLink;
+            // Then try https URI
+            const httpsUri = `https://swick24.github.io/game/${gameName}`;
             
-            // Set a timer to redirect to Play Store if the app doesn't open
-            setTimeout(function() {
-                // If we're still on this page, try with https URI
+            // Try intent first
+            window.location.href = intentUri;
+            
+            // Fallback to https if intent fails
+            setTimeout(() => {
                 if (document.visibilityState !== 'hidden') {
-                    window.location.href = httpsDeepLink;
+                    window.location.href = httpsUri;
                     
-                    // Final fallback to Play Store after another delay
-                    setTimeout(function() {
+                    // Final fallback to Play Store
+                    setTimeout(() => {
                         if (document.visibilityState !== 'hidden') {
                             window.location.href = playStoreUrl;
                         }
                     }, 1000);
                 }
-            }, 1500); // 1.5 second timeout for first attempt
+            }, 1500);
         }
-        
-        // Handle visibility change (in case the app opens but doesn't hide the page)
-        document.addEventListener('visibilitychange', function() {
-            if (document.visibilityState === 'hidden') {
-                // Page was hidden, likely because app opened successfully
-                clearTimeout();
-            }
-        });
     </script>
 </body>
 </html>
