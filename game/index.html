@@ -1,27 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
-    <script>
-        // Extract the path from the current URL
-        const path = window.location.pathname;
-        
-        // Check if the URL starts with /game/
-        if (path.startsWith('/game/')) {
-            // Extract the game name (everything after /game/)
-            const gameName = path.substring(6); // 6 is the length of "/game/"
-            
-            // Redirect to the game page with the game name as a query parameter
-            window.location.href = '/game/?game=' + gameName;
-        } else {
-            // For all other 404s, redirect to the homepage
-            window.location.href = '/';
-        }
-    </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome to My GitHub Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    h1 {
+      color: #333;
+    }
+    p {
+      color: #555;
+    }
+    a {
+      margin-top: 20px;
+      text-decoration: none;
+      color: #0066cc;
+    }
+  </style>
 </head>
 <body>
-    <p>Redirecting...</p>
+  <h1>Hello, World!</h1>
+  <p>Welcome to my GitHub Pages Games.</p>
+  <a href="https://github.com/yourusername" target="_blank">Visit my GitHub</a>
 </body>
 </html>
