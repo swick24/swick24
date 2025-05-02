@@ -1,10 +1,11 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "com.main.swick",
-    "sha256_certificate_fingerprints": [
-      "93:98:DD:3D:A7:13:E5:7E:D7:98:F7:F7:0B:C0:BB:C5:A6:C1:FE:41:B3:00:FB:42:70:72:AF:6C:76:80:B0:C3"
-    ]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.main.swick",
+      "sha256_cert_fingerprints":
+        ["93:98:DD:3D:A7:13:E5:7E:D7:98:F7:F7:0B:C0:BB:C5:A6:C1:FE:41:B3:00:FB:42:70:72:AF:6C:76:80:B0:C3"]
+    }
   }
-}]
+]
