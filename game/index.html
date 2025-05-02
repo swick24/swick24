@@ -55,52 +55,58 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Extract the game ID from the URL path
+            // Extract the game name from the URL path (format: /game/swing_hanger)
             const path = window.location.pathname;
-            const pathParts = path.split('/');
-            let gameId = '';
+            const gamePath = path.split('/game/')[1] || '';
             
-            // Get the last non-empty part of the path
-            for (let i = pathParts.length - 1; i >= 0; i--) {
-                if (pathParts[i] && pathParts[i] !== 'index.html') {
-                    gameId = pathParts[i];
-                    break;
-                }
+            // Remove any trailing slashes or .html
+            let gameName = gamePath.replace(/\/$/, '').replace('.html', '');
+            
+            // If no game name found, redirect to main page
+            if (!gameName) {
+                window.location.href = "https://swick24.github.io";
+                return;
             }
             
-            // Remove .html extension if present
-            if (gameId.endsWith('.html')) {
-                gameId = gameId.substring(0, gameId.length - 5);
-            }
-            
-            // If no game ID was found, use a default
-            if (!gameId) {
-                gameId = 'home';
-            }
-            
-            // Try to open the app
-            openApp(gameId);
+            // Try to open the app with deep link
+            openApp(gameName);
         });
         
-        function openApp(gameId) {
+        function openApp(gameName) {
             // App package name and Play Store URL
             const packageName = 'com.main.swick';
             const playStoreUrl = 'https://play.google.com/store/apps/details?id=' + packageName;
             
-            // Create the deep link URI
-            const deepLink = 'swickgames://game/' + gameId;
+            // Create both intent and https deep links
+            const intentDeepLink = `intent://swick24.github.io/game/${gameName}#Intent;scheme=https;package=${packageName};end`;
+            const httpsDeepLink = `https://swick24.github.io/game/${gameName}`;
             
-            // Try to open the app
-            window.location.href = deepLink;
+            // First try with intent URI (works better on Android)
+            window.location.href = intentDeepLink;
             
             // Set a timer to redirect to Play Store if the app doesn't open
             setTimeout(function() {
-                // If we're still on this page, redirect to Play Store
+                // If we're still on this page, try with https URI
                 if (document.visibilityState !== 'hidden') {
-                    window.location.href = playStoreUrl;
+                    window.location.href = httpsDeepLink;
+                    
+                    // Final fallback to Play Store after another delay
+                    setTimeout(function() {
+                        if (document.visibilityState !== 'hidden') {
+                            window.location.href = playStoreUrl;
+                        }
+                    }, 1000);
                 }
-            }, 2000); // 2 second timeout
+            }, 1500); // 1.5 second timeout for first attempt
         }
+        
+        // Handle visibility change (in case the app opens but doesn't hide the page)
+        document.addEventListener('visibilitychange', function() {
+            if (document.visibilityState === 'hidden') {
+                // Page was hidden, likely because app opened successfully
+                clearTimeout();
+            }
+        });
     </script>
 </body>
 </html>
