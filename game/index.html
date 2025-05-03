@@ -1,37 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Welcome to My GitHub Page</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f4f4f4;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    h1 {
-      color: #333;
-    }
-    p {
-      color: #555;
-    }
-    a {
-      margin-top: 20px;
-      text-decoration: none;
-      color: #0066cc;
-    }
-  </style>
+  <meta charset="utf-8">
+  <title>Opening Game...</title>
+  <script>
+    window.onload = function () {
+      // Get the current path like /game/amongus
+      const path = window.location.pathname;
+      const segments = path.split('/');
+      const gameSlug = segments.length > 2 ? segments[2] : null;
+
+      if (!gameSlug) {
+        document.body.innerHTML = "<p>Invalid game link.</p>";
+        return;
+      }
+
+      const appLink = `swick://game/${gameSlug}`;
+      const playStoreLink = "https://play.google.com/store/apps/details?id=com.your.package.name";
+
+      const now = Date.now();
+      setTimeout(() => {
+        if (Date.now() - now < 2000) {
+          window.location.href = playStoreLink;
+        }
+      }, 1500);
+
+      window.location.href = appLink;
+    };
+  </script>
 </head>
 <body>
-  <h1>Hello, World!</h1>
-  <p>Welcome to my GitHub Pages Games.</p>
-  <a href="https://github.com/yourusername" target="_blank">Visit my GitHub</a>
+  <p>Opening game in app...</p>
 </body>
 </html>
