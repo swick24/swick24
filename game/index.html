@@ -1,35 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Opening Game...</title>
-  <script>
-    window.onload = function () {
-      // Get the current path like /game/amongus
-      const path = window.location.pathname;
-      const segments = path.split('/');
-      const gameSlug = segments.length > 2 ? segments[2] : null;
-
-      if (!gameSlug) {
-        document.body.innerHTML = "<p>Invalid game link.</p>";
-        return;
-      }
-
-      const appLink = `swick://game/${gameSlug}`;
-      const playStoreLink = "https://play.google.com/store/apps/details?id=com.main.swick";
-
-      const now = Date.now();
-      setTimeout(() => {
-        if (Date.now() - now < 2000) {
-          window.location.href = playStoreLink;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to Google Play Store</title>
+    <script>
+        // Extract the game name from the URL path
+        function getGameName() {
+            const path = window.location.pathname;
+            const gamePathRegex = /\/game\/([^\/]+)/;
+            const match = path.match(gamePathRegex);
+            
+            if (match && match[1]) {
+                return match[1];
+            }
+            
+            return null;
         }
-      }, 1500);
 
-      window.location.href = appLink;
-    };
-  </script>
+        // Main redirect function
+        function redirectToPlayStore() {
+            const gameName = getGameName();
+            
+            // Your Google Play Store base URL - replace with your actual developer account
+            const playStoreBaseUrl = "https://play.google.com/store/apps/developer?id=YourDeveloperName";
+            
+            // You can customize the URL based on the game name if needed
+            let redirectUrl = playStoreBaseUrl;
+            
+            // Optional: Add game-specific redirection
+            // For example:
+            // if (gameName === "game1") {
+            //     redirectUrl = "https://play.google.com/store/apps/details?id=com.yourgame.game1";
+            // } else if (gameName === "game2") {
+            //     redirectUrl = "https://play.google.com/store/apps/details?id=com.yourgame.game2";
+            // }
+            
+            // Redirect to the Play Store
+            window.location.href = redirectUrl;
+        }
+
+        // Execute the redirect when the page loads
+        window.onload = redirectToPlayStore;
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+            margin: 20px 0;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-  <p>Opening game in app...</p>
+    <div class="container">
+        <h1>Redirecting to Google Play Store</h1>
+        <div class="loader"></div>
+        <p>If you are not redirected automatically, <a href="https://play.google.com/store/apps/developer?id=com.main.swick">click here</a>.</p>
+    </div>
 </body>
 </html>
